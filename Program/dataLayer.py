@@ -20,15 +20,17 @@ class Utilities:
         self._utility_id = utilityid
 
 class Event:
-    def __init__(self, eventid, name, location, description, party):
-        self._time = name
+    def __init__(self, eventid, name, time, location, status, party):
+        self._name = name
+        self._time = time
         self._location = location
-        self._description = description
+        self._status = status
         self._party = party
         self._event_id = eventid
 
 class Party:
-    def __init__(self, partyid, unitid):
+    def __init__(self, connectionid, unitid, partyid):
+        self._connection_id = connectionid
         self._unit_id = unitid
         self._party_id = partyid
 
@@ -42,6 +44,7 @@ class GetData:
         self._uid = 10000
         self._eid = 100000
         self._pid = 200000
+        self._cid = 500000
         self._member_size = 0
         self._utility_size = 0
         self._event_size = 0
@@ -102,15 +105,16 @@ class GetData:
             fields = line.split(";")
             eid = fields[0]
             name = fields[1]
-            location = fields[2]
-            description = fields[3]
-            party = fields[4]
-            self.add_events(name, location, description, party, eid)
+            time = fields[2]
+            location = fields[3]
+            status = fields[4]
+            party = fields[5]
+            self.add_events(name, time, location, status, party, eid)
     
-    def add_events(self, name, location, description, party, eid = None):
+    def add_events(self, name, time, location, status, party, eid = None):
         if eid == None:
             eid = self._eid
-        self._event_map[eid] = Event(eid, name, location, description, party)
+        self._event_map[eid] = Event(eid, name, time, location, status, party)
         self._event_size += 1 
         self._eid +=1
     
@@ -124,17 +128,20 @@ class GetData:
         parties_list=open("parties.csv", "r", encoding="utf-8").read().split('\n')
         for line in parties_list[:-1]:
             fields = line.split(";")
-            uid = fields[0]
-            pid = fields[1]
-            self.add_party(uid, pid)
+            cid = fields[0]
+            uid = fields[1]
+            pid = fields[2]
+            self.add_party(cid, uid, pid)
     
-    def add_party(self, uid, pid):
-        self._party_map[pid] = Party(uid, pid)
-        self._party_size += 1 
-        self._pid +=1
+    def add_party(self, cid, uid, pid):
+        if cid == None:
+            cid = self._cid
+        self._party_map[cid] = Party(cid, uid, pid)
+        self._party_size += 1
+        self._cid +=1
     
     def get_parties_list(self):
         parties_list = []
         for id in self._party_map:
-            parties_list.append(self._party_map[id])    
+            parties_list.append(self._party_map[id])  
         return parties_list
