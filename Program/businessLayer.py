@@ -10,7 +10,14 @@ if __name__ == "__main__":
     D = GetData()
     B = Business()
     D.get_members()
-    member_list = D.get_contacts_ordered()
+    D.get_utilities()
+    
+    member_list = D.get_member_list()
    
-    for memb in member_list:
-        print(memb._member_id, " | ", memb._name, " | ", memb._phone, " | ", memb._job, " | ", (now.year - int(memb._age)))
+    for member in member_list:
+        print(member._member_id, " | ", member._name, " | ", member._phone, " | ", member._job, " | ", (now.year - int(member._age)))
+
+    utilities_list = D.get_utilities_list()
+
+    for utility in utilities_list:
+        print(utility._utility_id, " | ", utility._name, " | ", utility._year, " | ", utility._manufacturer, " | ", utility._modified )
