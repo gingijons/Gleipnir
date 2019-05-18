@@ -75,9 +75,7 @@ class Business:
 
     def get_unit_details(self, unit_id):
         string = ""
-        print(int(unit_id))
         if int(unit_id) >= 10000:
-            print(True)
             for utility in self.utilities_list:
                 if utility._utility_id == unit_id:
                     string = ("Name: " + utility._name +  " | Modelyear: " + utility._year + " | Manufacturer: " + utility._manufacturer + " | Modified: ")
@@ -101,11 +99,47 @@ class Business:
             string += "no info"
         return string
 
+    #If changed make variable update file and data within program
+
+    def add_member_to_file(self, name, age, phone, job):
+        D.add_member(name, age, phone, job, None, True)
+        return "member added"
+    
+    def add_utility_to_file(self, name, year, manufacturer, modified):
+        D.add_utility(name, year, manufacturer, modified, None, True)
+        return "utility added"
 
 
-        
+    def update_member_details(self, what_to_change, value):
+        if what_to_change == "name":
+            pass
+        elif what_to_change == "age":
+            pass
+        elif what_to_change == "phone":
+            pass
+        elif what_to_change == "job":
+            pass
+    
+    def update_utility_details(self, what_to_change, value):
+        if what_to_change == "name":
+            pass
+        elif what_to_change == "year":
+            pass
+        elif what_to_change == "manufacturer":
+            pass
+        elif what_to_change == "modified":
+            pass
+    
+    # if deleted, update file and data within program
 
-        
+    def delete_line(self, delete_from, id_num):
+        if delete_from == "m":
+            pass
+            D.delete_member(id_num)
+            return "member deleted"
+        elif delete_from == "u":
+            pass
+            #D.delete_member
 
 
 if __name__ == "__main__":
@@ -135,4 +169,4 @@ if __name__ == "__main__":
         if party._party_id == "200001":
             print(party._unit_id)
     """
-    print(B.get_details("p", 200003))
+    print(B.delete_line("m", "0"))

@@ -61,12 +61,15 @@ class GetData:
             job = fields[4]
             self.add_member(name, age, phone, job, memberid)
 
-    def add_member(self, name, age, phone, job, memberid = None):
+    def add_member(self, name, age, phone, job, memberid = None, is_new = False):
         if memberid == None:
-            memberid = self._mid
+            memberid = str(self._mid)
+        print(memberid)
         self._members_map[memberid] = Member(memberid, name, age, phone, job)
         self._member_size += 1 
         self._mid +=1
+        if is_new:
+            self.save_member(name, age, phone, job, memberid)
 
     def get_member_list(self):
         members_list = []
@@ -86,12 +89,14 @@ class GetData:
             modified = fields[4]
             self.add_utility(name, year, manufacturer, modified, utilityid)
     
-    def add_utility(self, name, year, manufacturer, modified, uid = None):
+    def add_utility(self, name, year, manufacturer, modified, uid = None, is_new = False):
         if uid == None:
-            uid = self._uid
+            uid = str(self._uid)
         self._utilities_map[uid] = Utilities(uid, name, year, manufacturer, modified)
         self._utility_size += 1 
         self._uid +=1
+        if is_new:
+            self.save_utility(name, year, manufacturer, modified, uid)
 
     def get_utilities_list(self):
         utility_list = []
@@ -145,3 +150,30 @@ class GetData:
         for id in self._party_map:
             parties_list.append(self._party_map[id])  
         return parties_list
+
+    def save_member(self, name, age, phone, job, memberid):
+        f = open("members.csv", "a", encoding="utf-8")
+        f.write(memberid + ";" + name + ";" + age + ";" + phone + ";" + job + "\n")
+        f.close
+
+    def save_utility(self, name, year, manufacturer, modified, uid):
+        f = open("utilities.csv", "a", encoding="utf-8")
+        f.write(uid + ";" + name + ";" + year + ";" + manufacturer + ";" + modified + "\n")
+        f.close
+    
+# TODO gera þannig að hann les inn alla parta af öllum línum og skrifi þær aftur inn
+
+    def delete_member(self, member_id):
+        i = 0
+        member_id = int(member_id)
+        b = open("members.csv", "r", encoding="utf-8")
+        lines = b.readlines()
+        b.close()
+        f = open("members.csv", "w", encoding="utf-8")
+        for line in lines:
+            if i != member_id:
+                f.write(line)
+            i += 1    
+        
+        
+
