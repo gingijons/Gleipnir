@@ -27,6 +27,22 @@ class Business:
         if input == "m":
             for member in self.member_list:
                 lis += (member._member_id + " | " + member._name + "\n")
+        elif input == "mAndJobs":
+            for member in self.member_list:
+                lis += (member._member_id + " | " + member._name + " | ")
+                if member._job == "1":
+                    lis += "Fjallgönguliði"
+                elif member._job == "2":
+                    lis += "Vélsleðaliði"
+                elif member._job == "3":
+                    lis += "Jeppaliði" 
+                lis += "\n"
+        elif input == "uAndMod":
+            for utility in self.utilities_list:
+                lis += (utility._utility_id + " | " + utility._name)
+                if utility._modified == "1":
+                    lis += (" (Modified)")
+                lis += "\n"
         elif input == "u":
             for utility in self.utilities_list:
                 lis += (utility._utility_id + " | " + utility._name + "\n")
@@ -73,7 +89,7 @@ class Business:
             for utility in self.utilities_list:
                 if utility._utility_id == with_id:
                     string = ("Name: " + utility._name +  " | Modelyear: " + utility._year + " | Manufacturer: " + utility._manufacturer + " | Modified: ")
-                    if utility._modified == "0":
+                    if utility._modified == "1":
                         string += "Yes" 
                     else:
                         string += "No"
@@ -133,6 +149,15 @@ class Business:
         self.D.add_events(name, time, location, "active", party, None, True)
         self.events_list = self.D.get_events_list()
         return "event active"
+    
+    def add_party_to_file(self, members_list, utilities_list):
+        pid = self.D.get_party_id()
+        for i in range(len(members_list)):
+            self.D.add_party(str(members_list[i]), pid, None, True)
+        for i in range(len(utilities_list)):
+            self.D.add_party(str(utilities_list[i]), pid, None, True)
+        self.parties_list = self.D.get_parties_list()
+        return "party added with ID: ", pid
 
 
     def update_member_details(self, what_to_change, id_num, value):
@@ -207,7 +232,6 @@ class Business:
         
     
     def delete_specific_from_party(self, party_num, unit_num):
-        print(type(party_num), type(unit_num))
         self.D.delete_specific_from_party(party_num, unit_num)
         i = 0
         for party in self.parties_list:
@@ -215,6 +239,11 @@ class Business:
                 self.parties_list.pop(i)
             i+=1
         return "Unit removed"
+
+    def delete_entire_party(self, party_num):
+        self.D.delete_entire_party(party_num)
+        self.parties_list = self.D.get_parties_list()
+        return "party removed"
         
     def valid_member(self, id_num):
         for member in self.member_list:
@@ -246,6 +275,13 @@ class Business:
                     return True
         return False
 
+    def valid_pick(self, lis, pick):
+        for i in range(len(lis)):
+            print(lis[i])
+            if lis[i] == pick:
+                return False 
+        return True
+
 
 
 if __name__ == "__main__":
@@ -256,13 +292,19 @@ if __name__ == "__main__":
     D.get_events()
     D.get_parties()
 
+    lis = [1, 2, 3, 6, 9, 10]
+    lis.append(11)
+
+
+    print(B.valid_pick(lis, 12))
+
+"""
     for utility in B.utilities_list:
         print(utility._utility_id, " | ", utility._name, " | ", utility._year, " | ", utility._manufacturer, " | ", utility._modified )
     B.add_utility_to_file("Sleði 14", "2017", "Kawaiisakii", "0")
     for utility in B.utilities_list:
         print(utility._utility_id, " | ", utility._name, " | ", utility._year, " | ", utility._manufacturer, " | ", utility._modified )
     
-    """
     for member in B.member_list:
         print(member._member_id, " | ", member._name, " | ", member._phone, " | ", member._job, " | ", (now.year - int(member._age)))
 

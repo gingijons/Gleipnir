@@ -55,6 +55,11 @@ class GetData:
     
     def get_unit_id(self):
         return str(self._uid)
+    
+    def get_party_id(self):
+        pid = int(self._pid)
+        pid +=1
+        return str(pid)
 
     def get_members(self):
         member_list=open("members.csv", "r", encoding="utf-8-sig").read().split('\n')
@@ -145,15 +150,19 @@ class GetData:
             cid = fields[0]
             uid = fields[1]
             pid = fields[2]
-            self.add_party(cid, uid, pid)
+            self.add_party(uid, pid, cid)
     
-    def add_party(self, cid, uid, pid):
+    def add_party(self, uid, pid, cid = None, is_new = False):
         if cid == None:
             self._cid += 1
             cid = str(self._cid)
         self._party_map[cid] = Party(cid, uid, pid)
         self._party_size += 1
-        self._cid = cid
+        self._cid = int(cid)
+        if int(self._pid) < int(pid):
+            self._pid = int(pid)
+        if is_new:
+            self.save_party(cid, uid, pid)
     
     def get_parties_list(self):
         parties_list = []
@@ -174,6 +183,11 @@ class GetData:
     def save_event(self, eid, name, time, location, status, party):
         f = open("events.csv", "a", encoding="utf-8-sig")
         f.write(eid + ";" + name + ";" + time + ";" + location + ";" + status + ";" + party + "\n")
+        f.close
+    
+    def save_party(self, cid, uid, pid):
+        f = open("parties.csv", "a", encoding="utf-8-sig")
+        f.write(cid + ";" + uid + ";" + pid + "\n")
         f.close
     
 # TODO gera þannig að hann les inn alla parta af öllum línum og skrifi þær aftur inn
@@ -271,6 +285,28 @@ class GetData:
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 i +=1
+        
+    def delete_entire_party(self, party_num):
+        i = 0
+        b = open("parties.csv", "r", encoding="utf-8")
+        lines = b.readlines()
+        b.close()
+        for line in lines:
+            fields = line.split(";")
+            cid = fields[0]
+            uid = fields[1]
+            pid = fields[2]
+            if int(pid) != int(party_num):
+                if i == 0:
+                    f = open("parties.csv", "w", encoding="utf-8")
+                    f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
+                    f.close
+                else:
+                    f = open("parties.csv", "a", encoding="utf-8")
+                    f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
+                    f.close
+                i +=1
+    
             
     def update_member_file(self, what_to_change, id_num, value):
         i = 0
