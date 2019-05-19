@@ -51,7 +51,7 @@ class GetData:
         self._party_size = 0
 
     def get_members(self):
-        member_list=open("members.csv", "r", encoding="utf-8").read().split('\n')
+        member_list=open("members.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in member_list[:-1]:
             fields = line.split(";")
             memberid = fields[0]
@@ -63,11 +63,11 @@ class GetData:
 
     def add_member(self, name, age, phone, job, memberid = None, is_new = False):
         if memberid == None:
+            self._mid +=1
             memberid = str(self._mid)
-        print(memberid)
         self._members_map[memberid] = Member(memberid, name, age, phone, job)
         self._member_size += 1 
-        self._mid +=1
+        self._mid = int(memberid)
         if is_new:
             self.save_member(name, age, phone, job, memberid)
 
@@ -77,9 +77,8 @@ class GetData:
             members_list.append(self._members_map[id])    
         return members_list
 
-
     def get_utilities(self):
-        utilities_list=open("utilities.csv", "r", encoding="utf-8").read().split('\n')
+        utilities_list=open("utilities.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in utilities_list[:-1]:
             fields = line.split(";")
             utilityid = fields[0]
@@ -91,10 +90,11 @@ class GetData:
     
     def add_utility(self, name, year, manufacturer, modified, uid = None, is_new = False):
         if uid == None:
+            self._uid +=1
             uid = str(self._uid)
         self._utilities_map[uid] = Utilities(uid, name, year, manufacturer, modified)
         self._utility_size += 1 
-        self._uid +=1
+        self._uid = int(uid)
         if is_new:
             self.save_utility(name, year, manufacturer, modified, uid)
 
@@ -105,7 +105,7 @@ class GetData:
         return utility_list
 
     def get_events(self):
-        events_list=open("events.csv", "r", encoding="utf-8").read().split('\n')
+        events_list=open("events.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in events_list[:-1]:
             fields = line.split(";")
             eid = fields[0]
@@ -118,10 +118,11 @@ class GetData:
     
     def add_events(self, name, time, location, status, party, eid = None):
         if eid == None:
+            self._eid +=1
             eid = self._eid
         self._event_map[eid] = Event(eid, name, time, location, status, party)
         self._event_size += 1 
-        self._eid +=1
+        self._eid = eid
     
     def get_events_list(self):
         events_list = []
@@ -130,7 +131,7 @@ class GetData:
         return events_list
 
     def get_parties(self):
-        parties_list=open("parties.csv", "r", encoding="utf-8").read().split('\n')
+        parties_list=open("parties.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in parties_list[:-1]:
             fields = line.split(";")
             cid = fields[0]
@@ -140,10 +141,11 @@ class GetData:
     
     def add_party(self, cid, uid, pid):
         if cid == None:
+            self._cid += 1
             cid = self._cid
         self._party_map[cid] = Party(cid, uid, pid)
         self._party_size += 1
-        self._cid +=1
+        self._cid = cid
     
     def get_parties_list(self):
         parties_list = []
@@ -152,28 +154,126 @@ class GetData:
         return parties_list
 
     def save_member(self, name, age, phone, job, memberid):
-        f = open("members.csv", "a", encoding="utf-8")
+        f = open("members.csv", "a", encoding="utf-8-sig")
         f.write(memberid + ";" + name + ";" + age + ";" + phone + ";" + job + "\n")
         f.close
 
     def save_utility(self, name, year, manufacturer, modified, uid):
-        f = open("utilities.csv", "a", encoding="utf-8")
+        f = open("utilities.csv", "a", encoding="utf-8-sig")
         f.write(uid + ";" + name + ";" + year + ";" + manufacturer + ";" + modified + "\n")
         f.close
     
 # TODO gera þannig að hann les inn alla parta af öllum línum og skrifi þær aftur inn
+# delete_member og delete_utility eyða líka úr leitarhópum
 
     def delete_member(self, member_id):
         i = 0
         member_id = int(member_id)
-        b = open("members.csv", "r", encoding="utf-8")
+        b = open("members.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
-        f = open("members.csv", "w", encoding="utf-8")
         for line in lines:
-            if i != member_id:
-                f.write(line)
-            i += 1    
+            fields = line.split(";")
+            memberid = fields[0]
+            name = fields[1]
+            age = fields[2]
+            phone = fields[3]
+            job = fields[4]
+            if int(memberid) != member_id:
+                if i == 0:
+                    f = open("members.csv", "w", encoding="utf-8")
+                    f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
+                    f.close
+                else:
+                    f = open("members.csv", "a", encoding="utf-8")
+                    f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
+                    f.close
+                i +=1
         
+    def delete_utility(self, utility_id):
+        i = 0
+        b = open("utilities.csv", "r", encoding="utf-8-sig")
+        lines = b.readlines()
+        b.close()
+        for line in lines:
+            fields = line.split(";")
+            utilityid = fields[0]
+            name = fields[1]
+            year = fields[2]
+            manufacturer = fields[3]
+            modified = fields[4]
+            if utilityid != utility_id:
+                if i == 0:
+                    f = open("utilities.csv", "w", encoding="utf-8")
+                    f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
+                    f.close
+                else:
+                    f = open("utilities.csv", "a", encoding="utf-8")
+                    f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
+                    f.close
+                i +=1
+
+    def delete_from_party(self, id_num):
+        i = 0
+        b = open("parties.csv", "r", encoding="utf-8-sig")
+        lines = b.readlines()
+        b.close()
+        for line in lines:
+            fields = line.split(";")
+            cid = fields[0]
+            uid = fields[1]
+            pid = fields[2]
+            if uid != id_num:
+                if i == 0:
+                    f = open("parties.csv", "w", encoding="utf-8")
+                    f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
+                    f.close
+                else:
+                    f = open("parties.csv", "a", encoding="utf-8")
+                    f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
+                    f.close
+                i +=1
+
+#TODO hann er að eyða öllum línum með viðeigandi ID
+
+    def delete_specific_from_party(self, party_num, unit_num):
+        i = 0
+        b = open("parties.csv", "r", encoding="utf-8-sig")
+        lines = b.readlines()
+        b.close()
+        for line in lines:
+            fields = line.split(";")
+            cid = fields[0]
+            uid = fields[1]
+            pid = fields[2]
+            if pid != str(party_num) and uid != str(unit_num):
+                if i == 0:
+                    f = open("parties.csv", "w", encoding="utf-8")
+                    f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
+                    f.close
+                else:
+                    f = open("parties.csv", "a", encoding="utf-8")
+                    f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
+                    f.close
+                i +=1
+
+
         
+if __name__ == "__main__":
+    D = GetData()
+    D.get_members()
+    D.get_utilities()
+    D.get_events()
+    D.get_parties()
+    D.delete_utility("10006")
+    D.delete_from_party("10006")
+    D.delete_utility("10007")
+    D.delete_from_party("10007")
+    D.delete_utility("10009")
+    D.delete_from_party("10009")
+    #D.add_utility("Sleði 14", "2017", "Kawaiisakii", "0", None, True)
+    #D.add_utility("Sleði 14", "2017", "Kawaiisakii", "0", None, True)
+    #D.delete_utility("10008")
+    #D.add_utility("Sleði 14", "2017", "Kawaiisakii", "0", None, True)
+
 

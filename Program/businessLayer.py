@@ -1,4 +1,4 @@
-from dataLayer import *
+from dataLayer import GetData
 import datetime
 now = datetime.datetime.now()
 
@@ -22,7 +22,7 @@ class Business:
                 num += 1
         return num
 
-    def get_list_overview(self, input):  
+    def get_list_overview(self, input, partynum = None):  
         lis = ""
         if input == "m":
             for member in self.member_list:
@@ -37,6 +37,17 @@ class Business:
             for party in self.parties_list:
                 if party._party_id not in lis:
                     lis += (party._party_id + "\n")
+        elif input == "pDetails":
+            for party in self.parties_list:
+                if party._party_id == str(partynum):
+                    if int(str(party._unit_id)) < 10000:
+                        for member in self.member_list:
+                            if str(member._member_id) == str(party._unit_id):
+                                lis += (member._member_id + " | " + member._name + "\n")
+                    else:
+                        for utility in self.utilities_list:
+                            if utility._utility_id == party._unit_id:
+                                lis += (utility._utility_id + " | " + utility._name + "\n")
         return lis
 
     def get_details(self, from_list, with_id):
@@ -133,13 +144,61 @@ class Business:
     # if deleted, update file and data within program
 
     def delete_line(self, delete_from, id_num):
+        D = GetData()
         if delete_from == "m":
-            pass
             D.delete_member(id_num)
-            return "member deleted"
+            i = 0
+            for member in self.member_list:
+                if member._member_id == id_num:
+                    self.member_list.pop(i)
+                i+=1
+            return "Member removed"
+
         elif delete_from == "u":
-            pass
-            #D.delete_member
+            D.delete_utility(id_num)
+            self.utilities_list = D.get_utilities_list()
+            i = 0
+            for utility in self.utilities_list:
+                if utility._utility_id == id_num:
+                    self.utilities_list.pop(i)
+                i+=1
+        D.delete_from_party(id_num)
+    
+    def delete_specific_from_party(self, party_num, unit_num):
+        D = GetData()
+        print(str(party_num), str(unit_num))
+        D.delete_specific_from_party(party_num, unit_num)
+        i = 0
+        for party in self.parties_list:
+            if party._party_id == str(party_num) and party._unit_id == str(unit_num):
+                self.parties_list.pop(i)
+            i+=1
+        return "Unit removed"
+        
+    def valid_member(self, id_num):
+        for member in self.member_list:
+                if member._member_id == id_num:
+                    return True
+        return False
+
+    def valid_utility(self, id_num):
+        for utility in self.utilities_list:
+                if utility._utility_id == id_num:
+                    return True
+        return False
+    
+    def valid_party(self, id_num, is_unit_list = 0):
+        if is_unit_list == 0:
+            for party in self.parties_list:
+                    if party._party_id == id_num:
+                        return True
+        elif is_unit_list != 0:
+            for party in self.parties_list:
+                if party._party_id == is_unit_list:
+                    if party._unit_id == id_num:
+                        return True
+        return False
+
 
 
 if __name__ == "__main__":

@@ -24,8 +24,14 @@ if __name__ == "__main__":
                         print(B.get_list_overview("m"))
                         print("input ID to see details")
                         print("input: ")
-                        selection = input()
-                        print(B.get_details("m", selection))
+                        while B.valid_member(selection) == False:
+                            selection = input()
+                            if B.valid_member(selection):
+                                print(B.get_details("m", selection))
+                            elif selection == "Q" or selection == "q":
+                                break
+                            else:
+                                print("Invalid. try again")
 
                     elif selection == "E" or selection == "e":
                         pass
@@ -34,7 +40,20 @@ if __name__ == "__main__":
                         pass
                     
                     elif selection == "R" or selection == "r":
-                        pass
+                        print(B.get_list_overview("m"))
+                        print("ID to remove")
+                        print("input: ")
+                        while B.valid_member(selection) == False:
+                            selection = input()
+                            if B.valid_member(selection):
+                                print(B.delete_line("m", selection))
+                                break
+                            elif selection == "Q" or selection == "q":
+                                break
+                            else:
+                                print("Invalid. try again")
+
+
                     else:
                         if selection == "Q" or selection == "q":
                             break
@@ -49,8 +68,15 @@ if __name__ == "__main__":
                             print(B.get_list_overview("u"))
                             print("input ID to see details")
                             print("input: ")
-                            selection = input()
-                            print(B.get_details("u", selection))
+                            while B.valid_utility(selection) == False:
+                                selection = input()
+                                if B.valid_utility(selection):
+                                    print(B.get_details("u", selection))
+                                    break
+                                elif selection == "Q" or selection == "q":
+                                    break
+                                else:
+                                    print("Invalid. try again")
 
                         elif selection == "E" or selection == "e":
                             pass
@@ -59,7 +85,19 @@ if __name__ == "__main__":
                             pass
                         
                         elif selection == "R" or selection == "r":
-                            pass
+                            print(B.get_list_overview("u"))
+                            print("ID to remove")
+                            print("input: ")
+                            while B.valid_utility(selection) == False:
+                                selection = input()
+                                if B.valid_utility(selection):
+                                    print(B.delete_line("u", selection))
+                                    break
+                                elif selection == "Q" or selection == "q":
+                                    break
+                                else:
+                                    print("Invalid. try again")
+                                
 
                         else:
                             if selection == "Q" or selection == "q":
@@ -75,8 +113,15 @@ if __name__ == "__main__":
                             print(B.get_list_overview("p"))
                             print("input ID to see details")
                             print("input: ")
-                            selection = input()
-                            print(B.get_details("p", selection))
+                            while B.valid_party(selection) == False:
+                                selection = input()
+                                if B.valid_party(selection):
+                                    print(B.get_details("p", selection))
+                                    break
+                                elif selection == "Q" or selection == "q":
+                                    break
+                                else:
+                                    print("Invalid. try again")
 
                         elif selection == "E" or selection == "e":
                             pass
@@ -85,7 +130,29 @@ if __name__ == "__main__":
                             pass
                         
                         elif selection == "R" or selection == "r":
-                            pass
+                            print(B.get_list_overview("p"))
+                            print("ID to remove")
+                            print("input: ")
+                            while B.valid_party(selection) == False:
+                                selection = input()
+                                if B.valid_party(selection):
+                                    party = selection
+                                    print(B.get_list_overview("pDetails", party))
+                                    print("ID to remove")
+                                    print("input: ")
+                                    while B.valid_party(selection, party) == False:
+                                        selection = input()
+                                        if B.valid_party(selection, party):
+                                            print(B.delete_specific_from_party(party, selection))
+                                            break
+                                        elif selection == "Q" or selection == "q":
+                                            break
+                                        else:
+                                            print("Invalid. try again")
+                                elif selection == "Q" or selection == "q":
+                                    break
+                                else:
+                                    print("Invalid. try again")
 
                         else:
                             if selection == "Q" or selection == "q":
