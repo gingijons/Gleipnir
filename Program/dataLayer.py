@@ -50,6 +50,12 @@ class GetData:
         self._event_size = 0
         self._party_size = 0
 
+    def get_member_id(self):
+        return str(self._mid)
+    
+    def get_unit_id(self):
+        return str(self._uid)
+
     def get_members(self):
         member_list=open("members.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in member_list[:-1]:
@@ -116,13 +122,15 @@ class GetData:
             party = fields[5]
             self.add_events(name, time, location, status, party, eid)
     
-    def add_events(self, name, time, location, status, party, eid = None):
+    def add_events(self, name, time, location, status, party, eid = None, is_new = False):
         if eid == None:
             self._eid +=1
-            eid = self._eid
+            eid = str(self._eid)
         self._event_map[eid] = Event(eid, name, time, location, status, party)
         self._event_size += 1 
-        self._eid = eid
+        self._eid = int(eid)
+        if is_new:
+            self.save_event(eid, name, time, location, status, party)
     
     def get_events_list(self):
         events_list = []
@@ -142,7 +150,7 @@ class GetData:
     def add_party(self, cid, uid, pid):
         if cid == None:
             self._cid += 1
-            cid = self._cid
+            cid = str(self._cid)
         self._party_map[cid] = Party(cid, uid, pid)
         self._party_size += 1
         self._cid = cid
@@ -161,6 +169,11 @@ class GetData:
     def save_utility(self, name, year, manufacturer, modified, uid):
         f = open("utilities.csv", "a", encoding="utf-8-sig")
         f.write(uid + ";" + name + ";" + year + ";" + manufacturer + ";" + modified + "\n")
+        f.close
+    
+    def save_event(self, eid, name, time, location, status, party):
+        f = open("events.csv", "a", encoding="utf-8-sig")
+        f.write(eid + ";" + name + ";" + time + ";" + location + ";" + status + ";" + party + "\n")
         f.close
     
 # TODO gera þannig að hann les inn alla parta af öllum línum og skrifi þær aftur inn
@@ -189,6 +202,7 @@ class GetData:
                     f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                     f.close
                 i +=1
+        self._mid -=1
         
     def delete_utility(self, utility_id):
         i = 0
@@ -212,6 +226,7 @@ class GetData:
                     f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                     f.close
                 i +=1
+        self._uid -=1
 
     def delete_from_party(self, id_num):
         i = 0
@@ -246,7 +261,7 @@ class GetData:
             cid = fields[0]
             uid = fields[1]
             pid = fields[2]
-            if pid != str(party_num) and uid != str(unit_num):
+            if pid != party_num and uid != unit_num:
                 if i == 0:
                     f = open("parties.csv", "w", encoding="utf-8")
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
@@ -256,6 +271,168 @@ class GetData:
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 i +=1
+            
+    def update_member_file(self, what_to_change, id_num, value):
+        i = 0
+        member_id = int(id_num)
+        b = open("members.csv", "r", encoding="utf-8-sig")
+        lines = b.readlines()
+        b.close()
+        for line in lines:
+            fields = line.split(";")
+            memberid = fields[0]
+            name = fields[1]
+            age = fields[2]
+            phone = fields[3]
+            job = fields[4]
+            
+            if int(memberid) != member_id:
+                if i == 0:
+                    f = open("members.csv", "w", encoding="utf-8")
+                    f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
+                    f.close
+                else:
+                    f = open("members.csv", "a", encoding="utf-8")
+                    f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
+                    f.close
+
+            elif int(memberid) == member_id:
+                if what_to_change == "name":
+                    if i == 0:
+                        f = open("members.csv", "w", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(value) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
+                        f.close
+                    else:
+                        f = open("members.csv", "a", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(value) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
+                        f.close
+                
+                elif what_to_change == "age":
+                    if i == 0:
+                        f = open("members.csv", "w", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(name) + ";" + str(value) + ";" + str(phone) + ";" + str(job))
+                        f.close
+                    else:
+                        f = open("members.csv", "a", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(name) + ";" + str(value) + ";" + str(phone) + ";" + str(job))
+                        f.close
+
+                elif what_to_change == "phone":
+                    if i == 0:
+                        f = open("members.csv", "w", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(value) + ";" + str(job))
+                        f.close
+                    else:
+                        f = open("members.csv", "a", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(value) + ";" + str(job))
+                        f.close
+
+                elif what_to_change == "job":
+                    if i == 0:
+                        f = open("members.csv", "w", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(value) + "\n")
+                        f.close
+                    else:
+                        f = open("members.csv", "a", encoding="utf-8")
+                        f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(value) + "\n")
+                        f.close
+            i += 1
+
+    def update_utility_file(self, what_to_change, id_num, value):
+        i = 0
+        utility_id = id_num
+        b = open("utilities.csv", "r", encoding="utf-8-sig")
+        lines = b.readlines()
+        b.close()
+        for line in lines:
+            fields = line.split(";")
+            utilityid = fields[0]
+            name = fields[1]
+            year = fields[2]
+            manufacturer = fields[3]
+            modified = fields[4]
+            if utilityid != utility_id:
+                if i == 0:
+                    f = open("utilities.csv", "w", encoding="utf-8")
+                    f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
+                    f.close
+                else:
+                    f = open("utilities.csv", "a", encoding="utf-8")
+                    f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
+                    f.close
+            if utilityid == utility_id:
+                if what_to_change == "name":
+                    if i == 0:
+                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(value) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
+                        f.close
+                    else:
+                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(value) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
+                        f.close
+                if what_to_change == "year":
+                    if i == 0:
+                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(name) + ";" + str(value) + ";" + str(manufacturer) + ";" + str(modified))
+                        f.close
+                    else:
+                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(name) + ";" + str(value) + ";" + str(manufacturer) + ";" + str(modified))
+                        f.close
+                if what_to_change == "manufacturer":
+                    if i == 0:
+                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(value) + ";" + str(modified))
+                        f.close
+                    else:
+                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(value) + ";" + str(modified))
+                        f.close
+                if what_to_change == "modified":
+                    if i == 0:
+                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(value) + "\n")
+                        f.close
+                    else:
+                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(value) + "\n")
+                        f.close
+            i +=1
+
+    def update_event_status(self, id_num):
+        i = 0
+        id_num = str(id_num)
+        b = open("events.csv", "r", encoding="utf-8-sig")
+        lines = b.readlines()
+        b.close()
+        for line in lines:
+            fields = line.split(";")
+            eid = fields[0]
+            name = fields[1]
+            time = fields[2]
+            location = fields[3]
+            status = fields[4]
+            party = fields[5]
+            if id_num != eid:
+                if i == 0:
+                    f = open("events.csv", "w", encoding="utf-8")
+                    f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + str(status) + ";" + str(party))
+                    f.close
+                else:
+                    f = open("events.csv", "a", encoding="utf-8")
+                    f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + str(status) + ";" + str(party))
+                    f.close
+            if id_num == eid:
+                if i == 0:
+                    f = open("events.csv", "w", encoding="utf-8")
+                    f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + "inactive" + ";" + str(party))
+                    f.close
+                else:
+                    f = open("events.csv", "a", encoding="utf-8")
+                    f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + "inactive" + ";" + str(party))
+                    f.close
+            i += 1
+
 
 
         
