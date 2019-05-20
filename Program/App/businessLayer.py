@@ -1,11 +1,13 @@
-from dataLayer import GetData
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from Resource import dataLayer
 import datetime
 now = datetime.datetime.now()
 
 class Business:
-    D = GetData()
+    
     def __init__(self):
-        self.D = GetData()
+        self.D = dataLayer.GetData()
         self.D.get_members()
         self.D.get_utilities()
         self.D.get_events()
@@ -95,7 +97,7 @@ class Business:
                         string += "No"
                     string += "\n"
         elif from_list == "e":
-            for event in B.events_list:
+            for event in self.events_list:
                 if event._event_id == with_id:
                     string = (event._name + " | " + event._time + " | " + event._location + " | " + event._status, " | " + event._party + "\n")
         elif from_list == "p":
@@ -131,7 +133,11 @@ class Business:
             string += "no info"
         return string
 
-    #If changed make variable update file and data within program
+#=============================================================================
+#If changed, update file and data within program
+#
+#=============================================================================
+
 
     def add_member_to_file(self, name, age, phone, job):
         self.D.add_member(name, age, phone, job, None, True)
@@ -208,8 +214,9 @@ class Business:
                 event._status = "inactive"
 
 
-    
-    # if deleted, update file and data within program
+#=============================================================================
+# if deleted, update file and data within program
+#=============================================================================
 
     def delete_line(self, delete_from, id_num):
         self.D.delete_from_party(id_num)
@@ -282,10 +289,22 @@ class Business:
                 return False 
         return True
 
+    def valid_inactive_member(self, pick):
+        for event in self.events_list:   
+            if event._status == "active":       
+                for party in self.parties_list:
+                    if int(party._party_id) == int(event._party):
+                        if party._unit_id == str(pick):
+                            return False
+        return True
+
 
 
 if __name__ == "__main__":
-    D = GetData()
+    pass
+"""
+
+    D = dataLayer.GetData()
     B = Business()
     D.get_members()
     D.get_utilities()
@@ -296,9 +315,10 @@ if __name__ == "__main__":
     lis.append(11)
 
 
-    print(B.valid_pick(lis, 12))
+    if B.valid_inactive_member(15):
+        print("yes")
 
-"""
+
     for utility in B.utilities_list:
         print(utility._utility_id, " | ", utility._name, " | ", utility._year, " | ", utility._manufacturer, " | ", utility._modified )
     B.add_utility_to_file("Sleði 14", "2017", "Kawaiisakii", "0")

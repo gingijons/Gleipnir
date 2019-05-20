@@ -1,7 +1,5 @@
-
 from sortedcontainers import SortedDict
 import csv
-
 
 class Member:
     def __init__(self, memberid, name, age, phone, job):
@@ -62,7 +60,7 @@ class GetData:
         return str(pid)
 
     def get_members(self):
-        member_list=open("members.csv", "r", encoding="utf-8-sig").read().split('\n')
+        member_list=open("./Data/members.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in member_list[:-1]:
             fields = line.split(";")
             memberid = fields[0]
@@ -89,7 +87,7 @@ class GetData:
         return members_list
 
     def get_utilities(self):
-        utilities_list=open("utilities.csv", "r", encoding="utf-8-sig").read().split('\n')
+        utilities_list=open("./Data/utilities.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in utilities_list[:-1]:
             fields = line.split(";")
             utilityid = fields[0]
@@ -116,7 +114,7 @@ class GetData:
         return utility_list
 
     def get_events(self):
-        events_list=open("events.csv", "r", encoding="utf-8-sig").read().split('\n')
+        events_list=open("./Data/events.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in events_list[:-1]:
             fields = line.split(";")
             eid = fields[0]
@@ -144,7 +142,7 @@ class GetData:
         return events_list
 
     def get_parties(self):
-        parties_list=open("parties.csv", "r", encoding="utf-8-sig").read().split('\n')
+        parties_list=open("./Data/parties.csv", "r", encoding="utf-8-sig").read().split('\n')
         for line in parties_list[:-1]:
             fields = line.split(";")
             cid = fields[0]
@@ -171,32 +169,33 @@ class GetData:
         return parties_list
 
     def save_member(self, name, age, phone, job, memberid):
-        f = open("members.csv", "a", encoding="utf-8-sig")
+        f = open("./Data/members.csv", "a", encoding="utf-8-sig")
         f.write(memberid + ";" + name + ";" + age + ";" + phone + ";" + job + "\n")
         f.close
 
     def save_utility(self, name, year, manufacturer, modified, uid):
-        f = open("utilities.csv", "a", encoding="utf-8-sig")
+        f = open("./Data/utilities.csv", "a", encoding="utf-8-sig")
         f.write(uid + ";" + name + ";" + year + ";" + manufacturer + ";" + modified + "\n")
         f.close
     
     def save_event(self, eid, name, time, location, status, party):
-        f = open("events.csv", "a", encoding="utf-8-sig")
+        f = open("./Data/events.csv", "a", encoding="utf-8-sig")
         f.write(eid + ";" + name + ";" + time + ";" + location + ";" + status + ";" + party + "\n")
         f.close
     
     def save_party(self, cid, uid, pid):
-        f = open("parties.csv", "a", encoding="utf-8-sig")
+        f = open("./Data/parties.csv", "a", encoding="utf-8-sig")
         f.write(cid + ";" + uid + ";" + pid + "\n")
         f.close
     
-# TODO gera þannig að hann les inn alla parta af öllum línum og skrifi þær aftur inn
+#============================================================
 # delete_member og delete_utility eyða líka úr leitarhópum
+#============================================================
 
     def delete_member(self, member_id):
         i = 0
         member_id = int(member_id)
-        b = open("members.csv", "r", encoding="utf-8-sig")
+        b = open("./Data/members.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -208,11 +207,11 @@ class GetData:
             job = fields[4]
             if int(memberid) != member_id:
                 if i == 0:
-                    f = open("members.csv", "w", encoding="utf-8")
+                    f = open("./Data/members.csv", "w", encoding="utf-8")
                     f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                     f.close
                 else:
-                    f = open("members.csv", "a", encoding="utf-8")
+                    f = open("./Data/members.csv", "a", encoding="utf-8")
                     f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                     f.close
                 i +=1
@@ -220,7 +219,7 @@ class GetData:
         
     def delete_utility(self, utility_id):
         i = 0
-        b = open("utilities.csv", "r", encoding="utf-8-sig")
+        b = open("./Data/utilities.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -232,11 +231,11 @@ class GetData:
             modified = fields[4]
             if utilityid != utility_id:
                 if i == 0:
-                    f = open("utilities.csv", "w", encoding="utf-8")
+                    f = open("./Data/utilities.csv", "w", encoding="utf-8")
                     f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                     f.close
                 else:
-                    f = open("utilities.csv", "a", encoding="utf-8")
+                    f = open("./Data/utilities.csv", "a", encoding="utf-8")
                     f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                     f.close
                 i +=1
@@ -244,7 +243,7 @@ class GetData:
 
     def delete_from_party(self, id_num):
         i = 0
-        b = open("parties.csv", "r", encoding="utf-8-sig")
+        b = open("./Data/parties.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -254,20 +253,20 @@ class GetData:
             pid = fields[2]
             if uid != id_num:
                 if i == 0:
-                    f = open("parties.csv", "w", encoding="utf-8")
+                    f = open("./Data/parties.csv", "w", encoding="utf-8")
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 else:
-                    f = open("parties.csv", "a", encoding="utf-8")
+                    f = open("./Data/parties.csv", "a", encoding="utf-8")
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 i +=1
 
-#TODO hann er að eyða öllum línum með viðeigandi ID
+
 
     def delete_specific_from_party(self, party_num, unit_num):
         i = 0
-        b = open("parties.csv", "r", encoding="utf-8-sig")
+        b = open("./Data/parties.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -277,18 +276,18 @@ class GetData:
             pid = fields[2]
             if pid != party_num and uid != unit_num:
                 if i == 0:
-                    f = open("parties.csv", "w", encoding="utf-8")
+                    f = open("./Data/parties.csv", "w", encoding="utf-8")
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 else:
-                    f = open("parties.csv", "a", encoding="utf-8")
+                    f = open("./Data/parties.csv", "a", encoding="utf-8")
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 i +=1
         
     def delete_entire_party(self, party_num):
         i = 0
-        b = open("parties.csv", "r", encoding="utf-8")
+        b = open("./Data/parties.csv", "r", encoding="utf-8")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -298,11 +297,11 @@ class GetData:
             pid = fields[2]
             if int(pid) != int(party_num):
                 if i == 0:
-                    f = open("parties.csv", "w", encoding="utf-8")
+                    f = open("./Data/parties.csv", "w", encoding="utf-8")
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 else:
-                    f = open("parties.csv", "a", encoding="utf-8")
+                    f = open("./Data/parties.csv", "a", encoding="utf-8")
                     f.write(str(cid) + ";" + str(uid) + ";" + str(pid))
                     f.close
                 i +=1
@@ -311,7 +310,7 @@ class GetData:
     def update_member_file(self, what_to_change, id_num, value):
         i = 0
         member_id = int(id_num)
-        b = open("members.csv", "r", encoding="utf-8-sig")
+        b = open("./Data/members.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -324,52 +323,52 @@ class GetData:
             
             if int(memberid) != member_id:
                 if i == 0:
-                    f = open("members.csv", "w", encoding="utf-8")
+                    f = open("./Data/members.csv", "w", encoding="utf-8")
                     f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                     f.close
                 else:
-                    f = open("members.csv", "a", encoding="utf-8")
+                    f = open("./Data/members.csv", "a", encoding="utf-8")
                     f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                     f.close
 
             elif int(memberid) == member_id:
                 if what_to_change == "name":
                     if i == 0:
-                        f = open("members.csv", "w", encoding="utf-8")
+                        f = open("./Data/members.csv", "w", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(value) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                         f.close
                     else:
-                        f = open("members.csv", "a", encoding="utf-8")
+                        f = open("./Data/members.csv", "a", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(value) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                         f.close
                 
                 elif what_to_change == "age":
                     if i == 0:
-                        f = open("members.csv", "w", encoding="utf-8")
+                        f = open("./Data/members.csv", "w", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(name) + ";" + str(value) + ";" + str(phone) + ";" + str(job))
                         f.close
                     else:
-                        f = open("members.csv", "a", encoding="utf-8")
+                        f = open("./Data/members.csv", "a", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(name) + ";" + str(value) + ";" + str(phone) + ";" + str(job))
                         f.close
 
                 elif what_to_change == "phone":
                     if i == 0:
-                        f = open("members.csv", "w", encoding="utf-8")
+                        f = open("./Data/members.csv", "w", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(value) + ";" + str(job))
                         f.close
                     else:
-                        f = open("members.csv", "a", encoding="utf-8")
+                        f = open("./Data/members.csv", "a", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(value) + ";" + str(job))
                         f.close
 
                 elif what_to_change == "job":
                     if i == 0:
-                        f = open("members.csv", "w", encoding="utf-8")
+                        f = open("./Data/members.csv", "w", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(value) + "\n")
                         f.close
                     else:
-                        f = open("members.csv", "a", encoding="utf-8")
+                        f = open("./Data/members.csv", "a", encoding="utf-8")
                         f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(value) + "\n")
                         f.close
             i += 1
@@ -377,7 +376,7 @@ class GetData:
     def update_utility_file(self, what_to_change, id_num, value):
         i = 0
         utility_id = id_num
-        b = open("utilities.csv", "r", encoding="utf-8-sig")
+        b = open("./Data/utilities.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -389,48 +388,48 @@ class GetData:
             modified = fields[4]
             if utilityid != utility_id:
                 if i == 0:
-                    f = open("utilities.csv", "w", encoding="utf-8")
+                    f = open("./Data/utilities.csv", "w", encoding="utf-8")
                     f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                     f.close
                 else:
-                    f = open("utilities.csv", "a", encoding="utf-8")
+                    f = open("./Data/utilities.csv", "a", encoding="utf-8")
                     f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                     f.close
             if utilityid == utility_id:
                 if what_to_change == "name":
                     if i == 0:
-                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "w", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(value) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                         f.close
                     else:
-                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "a", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(value) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                         f.close
                 if what_to_change == "year":
                     if i == 0:
-                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "w", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(name) + ";" + str(value) + ";" + str(manufacturer) + ";" + str(modified))
                         f.close
                     else:
-                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "a", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(name) + ";" + str(value) + ";" + str(manufacturer) + ";" + str(modified))
                         f.close
                 if what_to_change == "manufacturer":
                     if i == 0:
-                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "w", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(value) + ";" + str(modified))
                         f.close
                     else:
-                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "a", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(value) + ";" + str(modified))
                         f.close
                 if what_to_change == "modified":
                     if i == 0:
-                        f = open("utilities.csv", "w", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "w", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(value) + "\n")
                         f.close
                     else:
-                        f = open("utilities.csv", "a", encoding="utf-8")
+                        f = open("./Data/utilities.csv", "a", encoding="utf-8")
                         f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(value) + "\n")
                         f.close
             i +=1
@@ -438,7 +437,7 @@ class GetData:
     def update_event_status(self, id_num):
         i = 0
         id_num = str(id_num)
-        b = open("events.csv", "r", encoding="utf-8-sig")
+        b = open("./Data/events.csv", "r", encoding="utf-8-sig")
         lines = b.readlines()
         b.close()
         for line in lines:
@@ -451,20 +450,20 @@ class GetData:
             party = fields[5]
             if id_num != eid:
                 if i == 0:
-                    f = open("events.csv", "w", encoding="utf-8")
+                    f = open("./Data/events.csv", "w", encoding="utf-8")
                     f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + str(status) + ";" + str(party))
                     f.close
                 else:
-                    f = open("events.csv", "a", encoding="utf-8")
+                    f = open("./Data/events.csv", "a", encoding="utf-8")
                     f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + str(status) + ";" + str(party))
                     f.close
             if id_num == eid:
                 if i == 0:
-                    f = open("events.csv", "w", encoding="utf-8")
+                    f = open("./Data/events.csv", "w", encoding="utf-8")
                     f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + "inactive" + ";" + str(party))
                     f.close
                 else:
-                    f = open("events.csv", "a", encoding="utf-8")
+                    f = open("./Data/events.csv", "a", encoding="utf-8")
                     f.write(str(eid) + ";" + str(name) + ";" + str(time) + ";" + str(location) + ";" + "inactive" + ";" + str(party))
                     f.close
             i += 1
@@ -475,15 +474,17 @@ class GetData:
 if __name__ == "__main__":
     D = GetData()
     D.get_members()
-    D.get_utilities()
-    D.get_events()
-    D.get_parties()
-    D.delete_utility("10006")
-    D.delete_from_party("10006")
-    D.delete_utility("10007")
-    D.delete_from_party("10007")
-    D.delete_utility("10009")
-    D.delete_from_party("10009")
+    members_list = D.get_member_list()
+    for member in members_list:
+        string = ("Name: " + member._name  + " | Phone: " + member._phone + " | Job: ")
+        if member._job == "1":
+            string += "Fjallgönguliði"
+        elif member._job == "2":
+            string += "Vélsleðaliði"
+        elif member._job == "3":
+            string += "Jeppaliði"
+        string += (" | Age: " + member._age + "\n")
+        print(string)
     #D.add_utility("Sleði 14", "2017", "Kawaiisakii", "0", None, True)
     #D.add_utility("Sleði 14", "2017", "Kawaiisakii", "0", None, True)
     #D.delete_utility("10008")

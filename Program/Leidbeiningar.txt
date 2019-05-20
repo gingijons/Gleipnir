@@ -1,0 +1,2 @@
+Keyra á forritið úr UI/uiLayer.py
+Password fyrir admin aðgang er: "no"
