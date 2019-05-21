@@ -74,7 +74,7 @@ class GetData:
         if memberid == None:
             self._mid +=1
             memberid = str(self._mid)
-        self._members_map[memberid] = Member(memberid, name, age, phone, job)
+        self._members_map[self._mid] = Member(memberid, name, age, phone, job)
         self._member_size += 1 
         self._mid = int(memberid)
         if is_new:
@@ -101,7 +101,7 @@ class GetData:
         if uid == None:
             self._uid +=1
             uid = str(self._uid)
-        self._utilities_map[uid] = Utilities(uid, name, year, manufacturer, modified)
+        self._utilities_map[self._uid] = Utilities(uid, name, year, manufacturer, modified)
         self._utility_size += 1 
         self._uid = int(uid)
         if is_new:
@@ -129,7 +129,7 @@ class GetData:
         if eid == None:
             self._eid +=1
             eid = str(self._eid)
-        self._event_map[eid] = Event(eid, name, time, location, status, party)
+        self._event_map[self._eid] = Event(eid, name, time, location, status, party)
         self._event_size += 1 
         self._eid = int(eid)
         if is_new:
@@ -154,7 +154,7 @@ class GetData:
         if cid == None:
             self._cid += 1
             cid = str(self._cid)
-        self._party_map[cid] = Party(cid, uid, pid)
+        self._party_map[self._cid] = Party(cid, uid, pid)
         self._party_size += 1
         self._cid = int(cid)
         if int(self._pid) < int(pid):
