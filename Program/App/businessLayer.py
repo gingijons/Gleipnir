@@ -51,11 +51,11 @@ class Business:
         elif input == "ePast":
             for event in self.events_list:
                 if event._status == "inactive":
-                    lis += (event._event_id + " | " +  event._name + "\n")
+                    lis += (event._event_id + " | " +  event._name + " | " + event._time + " | " + event._location + " | " + event._party + "\n")
         elif input == "eActive":
             for event in self.events_list:
                 if event._status == "active":
-                    lis += (event._event_id + " | " +  event._name + "\n")
+                    lis += (event._event_id + " | " +  event._name + " | " + event._time + " | " + event._location + " | " + event._party + "\n")
         elif input == "p":
             for party in self.parties_list:
                 if party._party_id not in lis:
@@ -141,6 +141,7 @@ class Business:
 
     def add_member_to_file(self, name, age, phone, job):
         self.D.add_member(name, age, phone, job, None, True)
+        self.D.get_members()
         self.member_list = self.D.get_member_list()
         return "member added"
     

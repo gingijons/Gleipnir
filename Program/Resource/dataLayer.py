@@ -215,7 +215,7 @@ class GetData:
                     f.write(str(memberid) + ";" + str(name) + ";" + str(age) + ";" + str(phone) + ";" + str(job))
                     f.close
                 i +=1
-        self._mid -=1
+        
         
     def delete_utility(self, utility_id):
         i = 0
@@ -239,7 +239,7 @@ class GetData:
                     f.write(str(utilityid) + ";" + str(name) + ";" + str(year) + ";" + str(manufacturer) + ";" + str(modified))
                     f.close
                 i +=1
-        self._uid -=1
+        
 
     def delete_from_party(self, id_num):
         i = 0
