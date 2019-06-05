@@ -138,7 +138,6 @@ class Business:
 #
 #=============================================================================
 
-
     def add_member_to_file(self, name, age, phone, job):
         self.D.add_member(name, age, phone, job, None, True)
         self.D.get_members()
@@ -168,7 +167,6 @@ class Business:
 
 
     def update_member_details(self, what_to_change, id_num, value):
-        
         self.D.update_member_file(what_to_change, id_num, value)
         if what_to_change == "name":
             for member in self.member_list:
@@ -187,9 +185,7 @@ class Business:
                 if member._member_id == id_num:
                     member._job = str(value)
 
-    
     def update_utility_details(self, what_to_change, id_num, value):
-        
         self.D.update_utility_file(what_to_change, id_num, value)
         if what_to_change == "name":
             for utility in self.utilities_list:
@@ -213,12 +209,9 @@ class Business:
         for event in self.events_list:
             if event._event_id == id_num:
                 event._status = "inactive"
-
-
 #=============================================================================
 # if deleted, update file and data within program
 #=============================================================================
-
     def delete_line(self, delete_from, id_num):
         self.D.delete_from_party(id_num)
         if delete_from == "m":
@@ -237,7 +230,6 @@ class Business:
                     self.utilities_list.pop(i)
                 i+=1
             return "utility removed"
-        
     
     def delete_specific_from_party(self, party_num, unit_num):
         self.D.delete_specific_from_party(party_num, unit_num)
@@ -299,49 +291,5 @@ class Business:
                             return False
         return True
 
-
-
 if __name__ == "__main__":
     pass
-"""
-
-    D = dataLayer.GetData()
-    B = Business()
-    D.get_members()
-    D.get_utilities()
-    D.get_events()
-    D.get_parties()
-
-    lis = [1, 2, 3, 6, 9, 10]
-    lis.append(11)
-
-
-    if B.valid_inactive_member(15):
-        print("yes")
-
-
-    for utility in B.utilities_list:
-        print(utility._utility_id, " | ", utility._name, " | ", utility._year, " | ", utility._manufacturer, " | ", utility._modified )
-    B.add_utility_to_file("Sleði 14", "2017", "Kawaiisakii", "0")
-    for utility in B.utilities_list:
-        print(utility._utility_id, " | ", utility._name, " | ", utility._year, " | ", utility._manufacturer, " | ", utility._modified )
-    
-    for member in B.member_list:
-        print(member._member_id, " | ", member._name, " | ", member._phone, " | ", member._job, " | ", (now.year - int(member._age)))
-
-    
-    print(now.year, now.month, now.day)
-
-    for utility in B.utilities_list:
-        print(utility._utility_id, " | ", utility._name, " | ", utility._year, " | ", utility._manufacturer, " | ", utility._modified )
-
-    
-
-    for event in B.events_list:
-        print(event._event_id, " | ", event._name, " | ", event._time, " | ", event._location, " | ", event._status, " | ", event._party )
-
-    for party in B.parties_list:
-        if party._party_id == "200001":
-            print(party._unit_id)
-    """
-    #print(B.delete_line("m", "0"))
